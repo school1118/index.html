@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>محاسبه‌گر هدایت تحصیلی - نمره پایه نهم لازم</title>
+<style>
+  body {
+    font-family: "Tahoma", sans-serif;
+    direction: rtl;
+    background: #f5f7fa;
+    margin: 0; padding: 20px;
+    max-width: 700px; margin-left: auto; margin-right: auto;
+    color: #222;
+  }
+  h2 {
+    text-align: center; color: #2c3e50;
+  }
+  form {
+    background: white;
+    padding: 20px; border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  fieldset {
+    border: 1px solid #ccc; margin-bottom: 20px;
+    border-radius: 8px; padding: 15px;
+    background: #f9fafc;
+  }
+  legend {
+    font-weight: bold; padding: 0 8px; color: #34495e;
+  }
+  label {
+    display: flex; align-items: center; margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+  input[type=number] {
+    width: 60px; padding: 6px 8px; margin-left: 12px;
+    border-radius: 5px; border: 1px solid #bbb;
+    font-size: 1rem; text-align: center;
+  }
+  select {
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+  }
+  button {
+    background-color: #27ae60; border: none;
+    padding: 12px 20px; color: white;
+    font-weight: bold; border-radius: 8px;
+    cursor: pointer; font-size: 1rem; margin-top: 10px;
+    width: 100%; transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #219150;
+  }
+  button:disabled {
+    background-color: #95a5a6; cursor: not-allowed;
+  }
+  .result {
+    margin-top: 25px;
+    background: white; padding: 15px 20px;
+    border-radius: 10px; box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    color: #34495e;
+  }
+  .result h3 {
+    margin-top: 15px; color: #2980b9;
+  }
+  .passed {
+    color: green; font-weight: bold;
+  }
+  .failed {
+    color: red; font-weight: bold;
+  }
+  .warning {
+    color: #e67e22; font-weight: bold;
+  }
+
+  /* بخش نکته */
+  #note {
+    background: #fff8dc;
+    border: 2px solid #f1c40f;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #7d6608;
+  }
+ 
+  @media (max-width: 480px) {
+    input[type=number] {
+      width: 50px; font-size: 0.9rem;
+    }
+  }
+
+  /* دکمه واتساپ */
+  #whatsapp-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #25D366;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 30px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 999;
+  }
+  #whatsapp-button img {
+    width: 24px;
+    height: 24px;
+  }
+  #whatsapp-button:hover {
+    background-color: #1ebe5d;
+  }
+</style>
+</head>
+<body>
+
+<h2>محاسبه‌گر هدایت تحصیلی - نمره پایه نهم لازم</h2>
+
+<form id="form">
+
+  <label for="fieldSelect">انتخاب رشته:</label>
+  <select id="fieldSelect" required>
+    <option value="" disabled selected>رشته خود را انتخاب کنید</option>
+    <option value="human">علوم انسانی</option>
+    <option value="islamic">علوم و معارف اسلامی</option>
+    <option value="experimental">علوم تجربی</option>
+    <option value="mathphy">ریاضی فیزیک</option>
+    <option value="karDaneshSanat">کاردانش و فنی حرفه‌ای - صنعت</option>
+    <option value="karDaneshKhedmat">کاردانش و فنی حرفه‌ای - خدمات</option>
+    <option value="karDaneshHonar">کاردانش و فنی حرفه‌ای - هنر</option>
+    <option value="karDaneshKeshavarzi">کاردانش و فنی حرفه‌ای - کشاورزی</option>
+  </select>
+
+  <div id="inputsContainer"></div>
+
+  <button type="button" onclick="calculate()">محاسبه نمره پایه نهم لازم</button>
+
+</form>
+
+<div class="result" id="result"></div>
+
+<p style="margin-top: 20px; font-size: 0.9rem; color: #555;">طراحی توسط: احمد علی پرست</p>
+
+<!-- نکته پایین صفحه -->
+<div id="note">
+در رشته علوم انسانی، <strong>ادبیات فارسی</strong> شامل دروس املاء، نگارش و ادبیات فارسی می‌شود. مجموع نمرات این سه درس را بر سه تقسیم کنید و نمره به‌دست‌آمده را در قسمت ادبیات فارسی برای هر پایه وارد نمایید.<br><br>
+در رشته علوم و معارف اسلامی، <strong>معارف اسلامی</strong> شامل دروس قرآن و پیام‌های آسمانی می‌شود. مجموع نمرات این دو درس را بر دو تقسیم کنید و نمره حاصل را در قسمت معارف اسلامی برای هر پایه ثبت کنید.
+</div>
+
+<!-- دکمه واتساپ -->
+<a href="https://wa.me/989107628500" target="_blank" id="whatsapp-button" title="ارتباط با ما">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساپ">
+  ارتباط با ما
+</a>
+
+<script>
+  const fields = {
+    human: {
+      name: "علوم انسانی",
+      subjects: {
+        "ادبیات فارسی": 14,
+        "مطالعات اجتماعی": 13,
+        "عربی": 12
+      }
+    },
+    islamic: {
+      name: "علوم و معارف اسلامی",
+      subjects: {
+        "معارف اسلامی": 14,
+        "زبان عربی": 14,
+        "ادبیات فارسی": 14
+      }
+    },
+    experimental: {
+      name: "علوم تجربی",
+      subjects: {
+        "علوم": 14,
+        "ریاضی": 13
+      }
+    },
+    mathphy: {
+      name: "ریاضی فیزیک",
+      subjects: {
+        "ریاضی": 14,
+        "علوم": 13
+      }
+    },
+    karDaneshSanat: {
+      name: "کاردانش و فنی حرفه‌ای - صنعت",
+      subjects: {
+        "ریاضی": 10,
+        "کار و فناوری": 12
+      }
+    },
+    karDaneshKhedmat: {
+      name: "کاردانش و فنی حرفه‌ای - خدمات",
+      subjects: {
+        "کار و فناوری": 10,
+        "فرهنگ و هنر": 10
+      }
+    },
+    karDaneshHonar: {
+      name: "کاردانش و فنی حرفه‌ای - هنر",
+      subjects: {
+        "کار و فناوری": 10,
+        "فرهنگ و هنر": 12
+      }
+    },
+    karDaneshKeshavarzi: {
+      name: "کاردانش و فنی حرفه‌ای - کشاورزی",
+      subjects: {}
+    }
+  };
+
+  const inputsContainer = document.getElementById("inputsContainer");
+  const fieldSelect = document.getElementById("fieldSelect");
+
+  function createInputs(fieldKey) {
+    inputsContainer.innerHTML = "";
+    const field = fields[fieldKey];
+    if(!field) return;
+
+    if(fieldKey === "karDaneshKeshavarzi") {
+      inputsContainer.innerHTML = "<p class='warning'>رشته کاردانش و فنی حرفه‌ای - کشاورزی نیاز به حد نصاب نمره ندارد.</p>";
+      return;
+    }
+
+    for (const subject in field.subjects) {
+      const div = document.createElement("fieldset");
+      div.innerHTML = `
+        <legend>${subject}</legend>
+        <label>پایه هفتم: <input type="number" min="0" max="20" step="0.1" required name="s7_${subject}"></label>
+        <label>پایه هشتم: <input type="number" min="0" max="20" step="0.1" required name="s8_${subject}"></label>
+      `;
+      inputsContainer.appendChild(div);
+    }
+  }
+
+  fieldSelect.addEventListener("change", function() {
+    createInputs(this.value);
+    document.getElementById("result").innerHTML = "";
+  });
+
+  function calculate() {
+    const fieldKey = fieldSelect.value;
+    if(!fieldKey) {
+      alert("لطفاً یک رشته را انتخاب کنید.");
+      return;
+    }
+
+    const field = fields[fieldKey];
+    if(!field) return;
+
+    if(fieldKey === "karDaneshKeshavarzi") {
+      document.getElementById("result").innerHTML = "<p class='passed'>رشته کاردانش و فنی حرفه‌ای - کشاورزی نیاز به حد نصاب نمره ندارد و قبول خواهید شد.</p>";
+      return;
+    }
+
+    let resultHtml = `<h3>نمره پایه نهم لازم برای رشته ${field.name}</h3><ul>`;
+    let canPass = true;
+
+    for (const subject in field.subjects) {
+      const inputs7 = document.getElementsByName(`s7_${subject}`)[0];
+      const inputs8 = document.getElementsByName(`s8_${subject}`)[0];
+
+      if(!inputs7 || !inputs8) {
+        alert("خطا در ورودی‌ها.");
+        return;
+      }
+
+      const n7 = parseFloat(inputs7.value);
+      const n8 = parseFloat(inputs8.value);
+      const M = field.subjects[subject];
+
+      if(isNaN(n7) || isNaN(n8)) {
+        alert(`لطفاً نمرات پایه هفتم و هشتم درس "${subject}" را وارد کنید.`);
+        return;
+      }
+
+      if(n7 <0 || n7 >20 || n8<0 || n8>20) {
+        alert(`نمرات درس "${subject}" باید بین 0 تا 20 باشند.`);
+        return;
+      }
+
+      const x = (5*M - n7 - n8) / 3;
+
+      if(x > 20) {
+        resultHtml += `<li><strong>${subject}:</strong> <span class="failed">نمره پایه نهم لازم بیشتر از 20 است (${x.toFixed(2)}). قبول نمی‌شود.</span></li>`;
+        canPass = false;
+      } else if(x < 0) {
+        resultHtml += `<li><strong>${subject}:</strong> <span class="passed">نمره پایه نهم لازم صفر یا کمتر (نمرات پایه 7 و 8 کافی است).</span></li>`;
+      } else {
+        resultHtml += `<li><strong>${subject}:</strong> <span class="passed">${x.toFixed(2)}</span></li>`;
+      }
+    }
+
+    resultHtml += "</ul>";
+
+    if(canPass) {
+      resultHtml += `<p class="passed">شما می‌توانید این رشته را قبول شوید اگر نمرات پایه نهم مطابق یا بالاتر از این مقادیر باشد.</p>`;
+    } else {
+      resultHtml += `<p class="failed">شما نمی‌توانید این رشته را قبول شوید زیرا حد نصاب نمرات برای برخی درس‌ها بیشتر از ۲۰ است.</p>`;
+    }
+
+    document.getElementById("result").innerHTML = resultHtml;
+  }
+</script>
+
+</body>
+</html> 
